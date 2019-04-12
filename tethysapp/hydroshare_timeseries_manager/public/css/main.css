@@ -1,0 +1,201 @@
+/* -------------- Tethys Overrides --------------- */
+
+#app-content-wrapper.show-nav #app-content {
+    padding-right: 0;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+#nav-title-wrapper {
+	padding-left: 7.5px;
+}
+
+.toggle-nav {
+	display: none !important;
+}
+
+
+/**/
+
+.form-check-input {
+    margin-top: 0 !important;
+    margin-right: 5px !important;
+    height: 14px;
+    width: 14px;
+}
+
+.form-control-file {
+    padding-top: 7px !important;
+    padding-bottom: 7px !important
+}
+
+
+/* ----------------- Data Table ------------------ */
+
+#data-table-container {
+    padding-top: 10px;
+}
+
+.dataTable {
+    display: block;
+    height: 61px;
+}
+
+.dataTable tr td {
+    font-size: 12px;
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 25px;
+}
+
+.dataTables_scroll {
+    height: 485px;
+}
+
+.dataTables_scrollBody {
+    height: 420px;
+    background-color: #E4E4E4;
+    border-right: 1px solid #E4E4E4;
+    border-left: 1px solid #E4E4E4;
+}
+
+.toolbar {
+    display: flex;
+}
+
+div.toolbar {
+    width: 50%;
+    float: left;
+}
+
+.toolbar-btn {
+    margin-right: 10px;
+}
+
+.tools {
+    margin-right: 15px;
+    display: flex;
+}
+
+.hs-options {
+    margin-right: 15px;
+    display: flex;
+}
+
+.loading-bar {
+    margin-right: 15px;
+    display: flex;
+}
+
+.footer {
+    display: flex;
+}
+
+.dataTables_info {
+    display: flex;
+    justify-content: center;
+    padding-top: 0 !important;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 22px;
+}
+
+.dataTables_length {
+    flex: 1;
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 22px;
+}
+
+.dataTables_paginate {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.dataTables_empty {
+    display: none;
+}
+
+.dropdown-menu > li > a {
+    cursor: pointer;
+}
+
+.status-icon {
+    height: 20px;
+}
+
+.status-message {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 10px;
+}
+
+.row-status {
+    text-align: center;
+    width: 20px;
+    display: flex;
+}
+
+/* Firefox old*/
+@-moz-keyframes blink {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+} 
+
+@-webkit-keyframes blink {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+/* IE */
+@-ms-keyframes blink {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+} 
+/* Opera and prob css3 final iteration */
+@keyframes blink {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity:0.2;
+    }
+    100% {
+        opacity:1;
+    }
+} 
+
+.blink {
+    -moz-animation: blink normal 1.5s infinite ease-in-out; /* Firefox */
+    -webkit-animation: blink normal 1.5s infinite ease-in-out; /* Webkit */
+    -ms-animation: blink normal 1.5s infinite ease-in-out; /* IE */
+    animation: blink normal 1.5s infinite ease-in-out; /* Opera and prob css3 final iteration */
+}

@@ -1,0 +1,287 @@
+{
+    "timeSeriesReferenceFile": {
+        "abstract": "Precipitation, temperature, and snow water equivalent data collected from 2019-04-09T15:05:41-06:00 to 2019-04-09T15:05:41-06:00 from the following sites: Cascade, Gooseberry RS, Idarado, Lizard Head Pass, Mineral Creek, Pickle Keg, and 1 more site. Data compiled by the HydroShare Time Series Manager on 2019-04-09T15:05:41-06:00.",
+        "fileVersion": "1.0.0",
+        "keyWords": [
+            "Precipitation",
+            "Temperature",
+            "Air",
+            "Snow water equivalent",
+            "Snow"
+        ],
+        "referencedTimeSeries": [
+            {
+                "beginDate": "1978-10-01T00:00:00+00:00",
+                "endDate": "2018-08-24T00:00:00+00:00",
+                "method": {
+                    "methodDescription": null,
+                    "methodLink": "Unknown"
+                },
+                "requestInfo": {
+                    "networkName": "SNOTEL",
+                    "refType": "WOF",
+                    "returnType": "WaterML 1.1",
+                    "serviceType": "SOAP",
+                    "url": "http://dev-hydroportal.cuahsi.org/Snotel/cuahsi_1_1.asmx?WSDL"
+                },
+                "sampleMedium": "Precipitation",
+                "site": {
+                    "latitude": "37.6508",
+                    "longitude": "-107.806",
+                    "siteCode": "SNOTEL:386_CO_SNTL",
+                    "siteName": "Cascade"
+                },
+                "valueCount": "0",
+                "variable": {
+                    "variableCode": "SNOTEL:PREC_H",
+                    "variableName": "Precipitation"
+                }
+            },
+            {
+                "beginDate": "1978-10-01T00:00:00+00:00",
+                "endDate": "2018-08-24T00:00:00+00:00",
+                "method": {
+                    "methodDescription": null,
+                    "methodLink": "Unknown"
+                },
+                "requestInfo": {
+                    "networkName": "SNOTEL",
+                    "refType": "WOF",
+                    "returnType": "WaterML 1.1",
+                    "serviceType": "SOAP",
+                    "url": "http://dev-hydroportal.cuahsi.org/Snotel/cuahsi_1_1.asmx?WSDL"
+                },
+                "sampleMedium": "Air",
+                "site": {
+                    "latitude": "37.6508",
+                    "longitude": "-107.806",
+                    "siteCode": "SNOTEL:386_CO_SNTL",
+                    "siteName": "Cascade"
+                },
+                "valueCount": "0",
+                "variable": {
+                    "variableCode": "SNOTEL:TOBS_H",
+                    "variableName": "Temperature"
+                }
+            },
+            {
+                "beginDate": "1978-10-01T00:00:00+00:00",
+                "endDate": "2018-08-24T00:00:00+00:00",
+                "method": {
+                    "methodDescription": null,
+                    "methodLink": "Unknown"
+                },
+                "requestInfo": {
+                    "networkName": "SNOTEL",
+                    "refType": "WOF",
+                    "returnType": "WaterML 1.1",
+                    "serviceType": "SOAP",
+                    "url": "http://dev-hydroportal.cuahsi.org/Snotel/cuahsi_1_1.asmx?WSDL"
+                },
+                "sampleMedium": "Snow",
+                "site": {
+                    "latitude": "37.6508",
+                    "longitude": "-107.806",
+                    "siteCode": "SNOTEL:386_CO_SNTL",
+                    "siteName": "Cascade"
+                },
+                "valueCount": "0",
+                "variable": {
+                    "variableCode": "SNOTEL:WTEQ_H",
+                    "variableName": "Snow water equivalent"
+                }
+            },
+            {
+                "beginDate": "1978-10-01T00:00:00+00:00",
+                "endDate": "2018-08-24T00:00:00+00:00",
+                "method": {
+                    "methodDescription": null,
+                    "methodLink": "Unknown"
+                },
+                "requestInfo": {
+                    "networkName": "SNOTEL",
+                    "refType": "WOF",
+                    "returnType": "WaterML 1.1",
+                    "serviceType": "SOAP",
+                    "url": "http://dev-hydroportal.cuahsi.org/Snotel/cuahsi_1_1.asmx?WSDL"
+                },
+                "sampleMedium": "Precipitation",
+                "site": {
+                    "latitude": "38.8003",
+                    "longitude": "-111.6833",
+                    "siteCode": "SNOTEL:495_UT_SNTL",
+                    "siteName": "Gooseberry RS"
+                },
+                "valueCount": "0",
+                "variable": {
+                    "variableCode": "SNOTEL:PREC_H",
+                    "variableName": "Precipitation"
+                }
+            },
+            {
+                "beginDate": "1979-10-01T00:00:00+00:00",
+                "endDate": "2018-08-24T00:00:00+00:00",
+                "method": {
+                    "methodDescription": null,
+                    "methodLink": "Unknown"
+                },
+                "requestInfo": {
+                    "networkName": "SNOTEL",
+                    "refType": "WOF",
+                    "returnType": "WaterML 1.1",
+                    "serviceType": "SOAP",
+                    "url": "http://dev-hydroportal.cuahsi.org/Snotel/cuahsi_1_1.asmx?WSDL"
+                },
+                "sampleMedium": "Precipitation",
+                "site": {
+                    "latitude": "37.9339",
+                    "longitude": "-107.6755",
+                    "siteCode": "SNOTEL:538_CO_SNTL",
+                    "siteName": "Idarado"
+                },
+                "valueCount": "0",
+                "variable": {
+                    "variableCode": "SNOTEL:PREC_H",
+                    "variableName": "Precipitation"
+                }
+            },
+            {
+                "beginDate": "1979-10-01T00:00:00+00:00",
+                "endDate": "2018-08-24T00:00:00+00:00",
+                "method": {
+                    "methodDescription": null,
+                    "methodLink": "Unknown"
+                },
+                "requestInfo": {
+                    "networkName": "SNOTEL",
+                    "refType": "WOF",
+                    "returnType": "WaterML 1.1",
+                    "serviceType": "SOAP",
+                    "url": "http://dev-hydroportal.cuahsi.org/Snotel/cuahsi_1_1.asmx?WSDL"
+                },
+                "sampleMedium": "Precipitation",
+                "site": {
+                    "latitude": "37.7993",
+                    "longitude": "-107.9243",
+                    "siteCode": "SNOTEL:586_CO_SNTL",
+                    "siteName": "Lizard Head Pass"
+                },
+                "valueCount": "0",
+                "variable": {
+                    "variableCode": "SNOTEL:PREC_H",
+                    "variableName": "Precipitation"
+                }
+            },
+            {
+                "beginDate": "1978-10-01T00:00:00+00:00",
+                "endDate": "2018-08-24T00:00:00+00:00",
+                "method": {
+                    "methodDescription": null,
+                    "methodLink": "Unknown"
+                },
+                "requestInfo": {
+                    "networkName": "SNOTEL",
+                    "refType": "WOF",
+                    "returnType": "WaterML 1.1",
+                    "serviceType": "SOAP",
+                    "url": "http://dev-hydroportal.cuahsi.org/Snotel/cuahsi_1_1.asmx?WSDL"
+                },
+                "sampleMedium": "Precipitation",
+                "site": {
+                    "latitude": "37.8475",
+                    "longitude": "-107.7266",
+                    "siteCode": "SNOTEL:629_CO_SNTL",
+                    "siteName": "Mineral Creek"
+                },
+                "valueCount": "0",
+                "variable": {
+                    "variableCode": "SNOTEL:PREC_H",
+                    "variableName": "Precipitation"
+                }
+            },
+            {
+                "beginDate": "1978-10-01T00:00:00+00:00",
+                "endDate": "2018-08-24T00:00:00+00:00",
+                "method": {
+                    "methodDescription": null,
+                    "methodLink": "Unknown"
+                },
+                "requestInfo": {
+                    "networkName": "SNOTEL",
+                    "refType": "WOF",
+                    "returnType": "WaterML 1.1",
+                    "serviceType": "SOAP",
+                    "url": "http://dev-hydroportal.cuahsi.org/Snotel/cuahsi_1_1.asmx?WSDL"
+                },
+                "sampleMedium": "Air",
+                "site": {
+                    "latitude": "37.8475",
+                    "longitude": "-107.7266",
+                    "siteCode": "SNOTEL:629_CO_SNTL",
+                    "siteName": "Mineral Creek"
+                },
+                "valueCount": "0",
+                "variable": {
+                    "variableCode": "SNOTEL:TOBS_H",
+                    "variableName": "Temperature"
+                }
+            },
+            {
+                "beginDate": "1978-10-01T00:00:00+00:00",
+                "endDate": "2018-08-24T00:00:00+00:00",
+                "method": {
+                    "methodDescription": null,
+                    "methodLink": "Unknown"
+                },
+                "requestInfo": {
+                    "networkName": "SNOTEL",
+                    "refType": "WOF",
+                    "returnType": "WaterML 1.1",
+                    "serviceType": "SOAP",
+                    "url": "http://dev-hydroportal.cuahsi.org/Snotel/cuahsi_1_1.asmx?WSDL"
+                },
+                "sampleMedium": "Snow",
+                "site": {
+                    "latitude": "37.8475",
+                    "longitude": "-107.7266",
+                    "siteCode": "SNOTEL:629_CO_SNTL",
+                    "siteName": "Mineral Creek"
+                },
+                "valueCount": "0",
+                "variable": {
+                    "variableCode": "SNOTEL:WTEQ_H",
+                    "variableName": "Snow water equivalent"
+                }
+            },
+            {
+                "beginDate": "1978-10-01T00:00:00+00:00",
+                "endDate": "2018-08-24T00:00:00+00:00",
+                "method": {
+                    "methodDescription": null,
+                    "methodLink": "Unknown"
+                },
+                "requestInfo": {
+                    "networkName": "SNOTEL",
+                    "refType": "WOF",
+                    "returnType": "WaterML 1.1",
+                    "serviceType": "SOAP",
+                    "url": "http://dev-hydroportal.cuahsi.org/Snotel/cuahsi_1_1.asmx?WSDL"
+                },
+                "sampleMedium": "Precipitation",
+                "site": {
+                    "latitude": "39.0122",
+                    "longitude": "-111.5826",
+                    "siteCode": "SNOTEL:691_UT_SNTL",
+                    "siteName": "Pickle Keg"
+                },
+                "valueCount": "0",
+                "variable": {
+                    "variableCode": "SNOTEL:PREC_H",
+                    "variableName": "Precipitation"
+                }
+            }
+        ],
+        "symbol": "https://www.hydroshare.org/static/img/logo-lg.png",
+        "title": "Time series dataset created on April 9th, 2019 by the HydroShare Time Series Manager"
+    }
+}
