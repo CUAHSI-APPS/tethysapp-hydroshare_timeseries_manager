@@ -4,6 +4,4 @@
 *.class
 *.pyo
 *.pyc
-*.db
-*.sqlite
 *.DS_Store
