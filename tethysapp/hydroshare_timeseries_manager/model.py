@@ -240,7 +240,9 @@ def get_timeseries_references(session_id, search_value, length, offset, column, 
     selected_query_count = selected_query.count()
     query_results = paginated_query.all()
 
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
     return full_query_count, filtered_query_count, selected_query_count, query_results
 
@@ -292,7 +294,10 @@ def update_timeseries_selections(session_id, timeseries_id, search_value, select
     filtered_query.update({TimeSeriesCatalog.selected: selected}, synchronize_session='fetch')
 
     session.commit()
+
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
 
 
@@ -333,7 +338,10 @@ def remove_timeseries_references(session_id, selected, timeseries_id):
     filtered_query.delete()
 
     session.commit()
+
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
 
 def get_timeseries_request_data(session_id, timeseries_id):
@@ -379,7 +387,9 @@ def get_timeseries_request_data(session_id, timeseries_id):
         TimeSeriesCatalog.timeseries_id == timeseries_id
     ).one()
 
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
     return filtered_query
 
@@ -436,7 +446,10 @@ def update_timeseries_reference(session_id, timeseries_id, status=None, status_d
     if url is not None : timeseries_reference.update({TimeSeriesCatalog.url: url})
 
     session.commit()
+
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
 
 def get_wml_data(session_id, timeseries_id):
@@ -464,7 +477,9 @@ def get_wml_data(session_id, timeseries_id):
             )
         ).one()
 
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
     return wml_data
 
@@ -555,7 +570,9 @@ def get_resource_metadata(session_id):
             )
         ).count()
 
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
     return site_names, site_count, variable_names, variable_count, sample_mediums, start_date, end_date, invalid_selected_count
 
@@ -598,7 +615,9 @@ def get_refts(session_id):
             )
         ).all()
 
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
     return refts
 
@@ -629,7 +648,10 @@ def add_pending_timeseries(session_id, refts_id, timeseries_id):
     session.add(new_pending_timeseries)
 
     session.commit()
+
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
 def get_pending_timeseries(session_id, refts_id):
     """
@@ -654,7 +676,10 @@ def get_pending_timeseries(session_id, refts_id):
         ).all()
 
     session.commit()
+
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
     return pending_timeseries
 
@@ -683,6 +708,9 @@ def remove_pending_timeseries(session_id, refts_id):
     pending_timeseries.delete()
 
     session.commit()
+
+    engine = session.get_bind()
     session.close()
+    engine.dispose()
 
 
