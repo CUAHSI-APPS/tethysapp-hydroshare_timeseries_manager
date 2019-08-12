@@ -44,6 +44,10 @@
     height: 61px;
 }
 
+.dataTable th {
+    padding-left: 10px !important;
+}
+
 .dataTable tr td {
     font-size: 12px;
     max-width: 0;
@@ -54,11 +58,11 @@
 }
 
 .dataTables_scroll {
-    height: 485px;
+    height: 505px;
 }
 
 .dataTables_scrollBody {
-    height: 420px;
+    height: 435px;
     background-color: #E4E4E4;
     border-right: 1px solid #E4E4E4;
     border-left: 1px solid #E4E4E4;
@@ -142,60 +146,4 @@ div.toolbar {
     text-align: center;
     width: 20px;
     display: flex;
-}
-
-/* Firefox old*/
-@-moz-keyframes blink {
-    0% {
-        opacity:1;
-    }
-    50% {
-        opacity:0;
-    }
-    100% {
-        opacity:1;
-    }
-} 
-
-@-webkit-keyframes blink {
-    0% {
-        opacity:1;
-    }
-    50% {
-        opacity:0;
-    }
-    100% {
-        opacity:1;
-    }
-}
-/* IE */
-@-ms-keyframes blink {
-    0% {
-        opacity:1;
-    }
-    50% {
-        opacity:0;
-    }
-    100% {
-        opacity:1;
-    }
-} 
-/* Opera and prob css3 final iteration */
-@keyframes blink {
-    0% {
-        opacity:1;
-    }
-    50% {
-        opacity:0.2;
-    }
-    100% {
-        opacity:1;
-    }
-} 
-
-.blink {
-    -moz-animation: blink normal 1.5s infinite ease-in-out; /* Firefox */
-    -webkit-animation: blink normal 1.5s infinite ease-in-out; /* Webkit */
-    -ms-animation: blink normal 1.5s infinite ease-in-out; /* IE */
-    animation: blink normal 1.5s infinite ease-in-out; /* Opera and prob css3 final iteration */
 }

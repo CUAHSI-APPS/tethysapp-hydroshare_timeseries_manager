@@ -3,51 +3,41 @@ import json
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .app import HydroshareTimeseriesManager as app
-from .utilities import process_form_data, add_refts_to_session, get_refts_from_hydroshare
-from .model import check_timeseries_status
+from .utilities import process_form_data
+
+hydroshare_url = app.get_custom_setting("hydroshare_url")
+hydroserver_url = app.get_custom_setting("hydroserver_url")
 
 
 @csrf_exempt
 def home(request):
     """
     Controller for the app home page.
+
+    POST requests can be receieved from the CUAHSI HydroClient when exporting data to
+    HydroShare. These requests include a form describing the reference data exported 
+    from the HydroClient workspace, but should not include any URL query parameters.
+
+    GET requests can be launched from HydroShare and may contain URL query parameters
+    describing the resource or aggregation to retrieve data from.
     """
 
     session_id = str(uuid.uuid4())
-    resource_id = ""
-    hydroshare_url = app.get_custom_setting("hydroshare_url")
+    resource_id = request.GET.get("resource_id")
+    aggregation_id = request.GET.get("aggregation_path")
+    refts = None
 
     if request.POST:
-        session_id = str(uuid.uuid4())
-        resource_id = ""
+        resource_id = None
+        aggregation_id = None
         form = json.dumps(request.POST)
-        refts = process_form_data(form)
-        add_refts_to_session(refts, session_id)
-
-    elif request.GET:
-        if request.GET.get("session_id") and not request.GET.get("resource_id"):
-            session_id = request.GET.get("session_id")
-            resource_id = ""
-        elif request.GET.get("resource_id") and not request.GET.get("session_id"):
-            session_id = str(uuid.uuid4())
-            resource_id = request.GET.get("resource_id")
-            refts = get_refts_from_hydroshare(resource_id)
-            add_refts_to_session(refts, session_id)
-        elif request.GET.get("session_id") and request.GET.get("resource_id"):
-            session_id = request.GET.get("session_id")
-            resource_id = request.GET.get("resource_id")
-            refts_statuses = check_timeseries_status(session_id)
-            if not refts_statuses:
-                refts = get_refts_from_hydroshare(resource_id)
-                add_refts_to_session(refts, session_id) 
-        else:
-            session_id = str(uuid.uuid4())
-            resource_id = ""
+        refts = json.dumps(process_form_data(form))
 
     context = {
         "session_id": session_id,
         "resource_id": resource_id,
-        "hydroshare_url": hydroshare_url
+        "aggregation_id": aggregation_id,
+        "refts": refts
     }
 
     return render(request, 'hydroshare_timeseries_manager/home.html', context)

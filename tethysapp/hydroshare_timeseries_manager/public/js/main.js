@@ -7,6 +7,8 @@
      *****************************************************************************************/
 
     var dataTable;
+    var dtState;
+    var recordsSelected;
 
     /*****************************************************************************************
      ************************************** FUNCTIONS ****************************************
@@ -14,34 +16,87 @@
 
     /* Initializes HydroShare Time Series Creator App */
     function initApp() {
-        history.pushState(null, "", location.href.split("?")[0]);
+        //history.pushState(null, "", location.href.split("?")[0]);
+        dtState = {
+            'top': 0,
+            'left': 0
+        };
         dataTable = $('#data-table').DataTable({
             'dom': '<"toolbar"><frt><"footer"lip>',
-            'select': true,
-            'selection': 'multiple',
+            'ordering': false,
+            'serverSide': true,
+            'ajax': {
+                'url': '/apps/hydroshare-timeseries-manager/ajax/update-table/',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                'data': {
+                    'session-id': $('#session-id').text()
+                },
+                'dataSrc': function(json) {
+                    recordsSelected = json.recordsSelected
+                    for (var i = 0; i < json.data.length; i++) {
+                        switch (json.data[i][0]) {
+                            case 'Waiting':
+                                json.data[i][0] = `<img style="float:left;"class="status-icon" src="/static/hydroshare_timeseries_manager/images/spinner.gif">`
+                                break;
+                            case 'Downloading':
+                                json.data[i][0] = `<img style="float:left;"class="status-icon" src="/static/hydroshare_timeseries_manager/images/spinner.gif">`
+                                break;
+                            case 'Validating':
+                                json.data[i][0] = `<img style="float:left;"class="status-icon" src="/static/hydroshare_timeseries_manager/images/spinner.gif">`
+                                break;
+                            case 'Ready':
+                                json.data[i][0] = `<img style="float:left;"class="status-icon" src="/static/hydroshare_timeseries_manager/images/green_light.svg">`
+                                break;
+                            case 'Failed':
+                                json.data[i][0] = `<img style="float:left;"class="status-icon" src="/static/hydroshare_timeseries_manager/images/red_light.svg">`
+                                break;
+                        };
+                    };
+                    return json.data
+                }
+            },
+            'drawCallback': function() {
+                $(dataTable.settings()[0].nScrollBody).scrollTop(dtState.top);
+                $(dataTable.settings()[0].nScrollBody).scrollLeft(dtState.left);
+                dataTable.rows().eq(0).each(function(index){
+                    var row = dataTable.row(index);
+                    var data = row.data();
+                    if (data[20] === true) {
+                        row.select();
+                    };
+                });
+                if (recordsSelected > 0) {
+                    $('#data-table_info').append(` (${recordsSelected} selected)`);
+                };
+            },
             'scrollX': true,
             'paging': true,
             'columnDefs': [
                 {'defaultContent': '', 'targets': '_all'},
-                {'width': '60px', 'targets': 0},
+                {'width': '5px', 'targets': 0},
                 {'width': '80px', 'targets': 1},
                 {'width': '80px', 'targets': 2},
-                {'width': '20px', 'targets': 3},
-                {'width': '20px', 'targets': 4},
-                {'width': '80px', 'targets': 5},
+                {'width': '80px', 'targets': 3},
+                {'width': '40px', 'targets': 4},
+                {'width': '40px', 'targets': 5},
                 {'width': '80px', 'targets': 6},
-                {'width': '20px', 'targets': 7},
+                {'width': '80px', 'targets': 7},
                 {'width': '80px', 'targets': 8},
                 {'width': '80px', 'targets': 9},
-                {'width': '20px', 'targets': 10},
-                {'width': '20px', 'targets': 11},
-                {'width': '20px', 'targets': 12},
-                {'width': '20px', 'targets': 13},
-                {'width': '20px', 'targets': 14},
-                {'width': '20px', 'targets': 15},
-                {'width': '20px', 'targets': 16},
-                {'width': '20px', 'targets': 17},
-                {'visible': false, 'targets': 18}
+                {'width': '80px', 'targets': 10},
+                {'width': '40px', 'targets': 11},
+                {'width': '80px', 'targets': 12},
+                {'width': '80px', 'targets': 13},
+                {'width': '80px', 'targets': 14},
+                {'width': '80px', 'targets': 15},
+                {'width': '40px', 'targets': 16},
+                {'width': '40px', 'targets': 17},
+                {'width': '80px', 'targets': 18},
+                {'visible': false, 'targets': 19},
+                {'visible': false, 'targets': 20}
             ]
         });
         $("div.toolbar").html(`
@@ -59,31 +114,281 @@
                     <span class="glyphicon tool-glyph glyphicon-trash"></span>
                 </button>
             </div>
-            <div class="hs-options dropdown">
-                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">HydroShare Actions
-                <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a id="create-resource-btn" data-toggle="modal" data-target="#modal-create-resource-dialog">Create Resource</a></li>
-                    <li><a id="update-resource-btn" data-toggle="modal" data-target="#help-modal">Update Resource</a></li>
-                    <li><a id="view-resource-btn">View Resource</a></li>
-                </ul>
-            </div>
+            <button id="btn-create-resource" class="btn btn-success" type="button">Create Resource</button>
             <div class="loading-bar"></div>
         `);
         window.onbeforeunload = function() {
-            if(confirm()) {
-                return true;
-            } else {
-                loginTest();
-                return false;
-            };
+            removeRows(false);
         };
-        loginTest();
-        loadSessionData();
+        window.setInterval(function() {
+            updateTable();
+        }, 3000);
+        var sessionId = $('#session-id').text();
+        var postRefts = $('#refts').text();
+        var resourceId = $('#resource-id').text();
+        var aggregationId = $('#aggregation-id').text();
+        addDataToSession(resourceId, aggregationId, postRefts);
+        //loginTest();
     };
 
+    function updateTable() {
+        dtState = {
+            'top': $(dataTable.settings()[0].nScrollBody).scrollTop(),
+            'left': $(dataTable.settings()[0].nScrollBody).scrollLeft()
+        };
+        dataTable.ajax.reload(null, false);
+    };
 
-    /* Checks to see whther the user is logged in to their HydroShare account */
+    function selectAll() {
+        var timeseriesId = null;
+        var selected = true;
+        updateSelectedRows(timeseriesId, selected);
+    };
+
+    function deselectAll() {
+        var timeseriesId = null;
+        var selected = false;
+        updateSelectedRows(timeseriesId, selected);
+    };
+
+    function toggleSelect() {
+        var timeseriesId = dataTable.row($(this)).data()[19];
+        var selected = !$(this).hasClass('selected');
+        updateSelectedRows(timeseriesId, selected);
+    };
+
+    function updateSelectedRows(timeseriesId, selected) {
+        $.ajax({
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            type: 'POST',
+            data: {
+                'sessionId': $('#session-id').text(),
+                'timeseriesId': timeseriesId,
+                'searchValue': $('.dataTables_filter input').val(),
+                'selected': selected
+            },
+            url: '/apps/hydroshare-timeseries-manager/ajax/update-selections/',
+            success: function(response) {
+                updateTable();
+            },
+            error: function(response) {
+
+            }
+        });
+    };
+
+    function removeSelectedRows() {
+        removeRows(true);
+    };
+
+    function removeRows(selected) {
+        $.ajax({
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            type: 'POST',
+            data: {
+                'sessionId': $('#session-id').text(),
+                'selected': selected
+            },
+            url: '/apps/hydroshare-timeseries-manager/ajax/remove-timeseries/',
+            success: function(response) {
+                updateTable();
+            },
+            error: function(response) {
+
+            }
+        });
+    };
+
+    function addDataToSession(resourceId, aggregationId, reftsJson) {
+        $.ajax({
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            type: 'POST',
+            data: {
+                'sessionId': $('#session-id').text(),
+                'resourceId': resourceId,
+                'aggregationId': aggregationId,
+                'reftsJson': reftsJson
+            },
+            url: '/apps/hydroshare-timeseries-manager/ajax/add-session-data/',
+            success: function(response) {
+                updateTable();
+                if (response['success'] === true && response['refts_id'] !== null) {
+                    prepareSessionData(response['refts_id']);
+                };
+            },
+            error: function(response) {
+
+            }
+        });
+    };
+
+    function prepareSessionData(reftsId) {
+        $.ajax({
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            type: 'POST',
+            data: {
+                'sessionId': $('#session-id').text(),
+                'reftsId': reftsId
+            },
+            url: '/apps/hydroshare-timeseries-manager/ajax/prepare-session-data/',
+            success: function(response) {
+
+            },
+            error: function(response) {
+
+            }
+        });
+    };
+
+    function updateResourceMetadata() {
+        $('#create-res-message').val('');
+        $('#res-title').val('');
+        $('#res-abstract').val('');
+        $('#res-keywords').val('');
+        $.ajax({
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            type: 'POST',
+            data: {
+                'sessionId': $('#session-id').text()
+            },
+            url: '/apps/hydroshare-timeseries-manager/ajax/update-resource-metadata/',
+            success: function(response) {
+                if (response['success'] === true) {
+                    $('#res-title').val(response['res_title']);
+                    $('#res-abstract').val(response['res_abstract']);
+                    $('#res-keywords').val(response['res_keywords']);
+                    $('#res-filename').val(response['res_filename']);
+                    $('#modal-create-resource-dialog').modal('show');
+                } else {
+                    alert(response['message']);
+                };
+            },
+            error: function(response) {
+
+            }
+        });
+    };
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                };
+            };
+        };
+        return cookieValue;
+    };
+
+    function createHydroShareResource() {
+        //loginTest();
+        var resTitle = $('#res-title').val();
+        var resAbstract = $('#res-abstract').val();
+        var resKeywords = $('#res-keywords').val();
+        var resFilename = $('#res-filename').val();
+        var createTsdb = $('#chk-ts').is(":checked");
+        var createRefts = $('#chk-refts').is(":checked");
+        var createPublic = $('#chk-public').is(":checked");
+        if (resTitle === '') {
+            alert('Please include a resource title.');
+            return;
+        };
+        if (resAbstract === '') {
+            alert('Please include a resource abstract.');
+            return;
+        };
+        if (resKeywords === '') {
+            alert('Please include at least one resource keyword.');
+            return;
+        };
+        if (resFilename === '') {
+            alert('Please include at a resource file name.');
+            return;
+        };
+        if (!createTsdb && !createRefts) {
+            alert('Please select either "Create Time Series Database" or "Create Reference Time Series".');
+            return;
+        };
+        var data = {
+            'sessionId': $('#session-id').text(),
+            'resTitle': resTitle,
+            'resAbstract': resAbstract,
+            'resKeywords': resKeywords,
+            'resFilename': resFilename,
+            'createTs': createTsdb,
+            'createRefts': createRefts,
+            'createPublic': createPublic
+        };
+        $.ajax({
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            type: 'POST',
+            data: data,
+            url: '/apps/hydroshare-timeseries-manager/ajax/create-resource/',
+            success: function(response) {
+                if (response['success'] == true) {
+                    alert("success");
+                } else {
+                    console.log('Create Resource Failed');
+                };
+            },
+            error: function(response) {
+                console.log('Create Resource Failed');
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
     function loginTest() {
         $.ajax({
             headers: {
@@ -102,8 +407,6 @@
         });
     };
 
-
-    /* Logs the user into their HydroShare account via the OAuth2 protocol */
     function hydroShareLogin() {
         window.onbeforeunload = null;
         var hydroshareUrl = $('#hydroshare-url').text();
@@ -123,7 +426,6 @@
         };
     };
 
-    /* Loads session data into the data table */
     function loadSessionData() {
         var sessionId = $('#session-id').text();
         var timeSeriesIds = dataTable.column(18).data().toArray();
@@ -155,7 +457,6 @@
     };
 
 
-    /* Adds rows to data table */
     function addRowsToTable(rows) {
         for (var i = 0; i < rows.length; i++) { 
             var row = [
@@ -262,7 +563,6 @@
         };
     };
 
-    /* Creates a HydroShare Resource */
     function createHydroShareResource() {
         loginTest();
         var resTitle = $('#res-title').val();
@@ -327,26 +627,16 @@
         });
     }
 
-    /* Selects Filtered Rows on Data Table */
-    function tableSelectAll() {
-        dataTable.rows({
-            search: 'applied' 
-        }).select();
-    };
-
-    /* Deselects Rows from Data Table */
     function tableDeselectAll() {
         dataTable.rows({
             search: 'applied'
         }).deselect();
     };
 
-    /* Removes Rows from Data Table */
     function tableRemoveData() {
         dataTable.rows('.selected').remove().draw();
     };
 
-    /* Updates Default Resource Metadata */
     function updateDefaultResourceMetadata() {
         var timeSeriesData = dataTable.rows({selected: true}).data().toArray().map(x => [x[1],x[5],x[7],x[8],x[9]]);
         var generationDateShort = moment().format('MMMM Do, YYYY');
@@ -400,7 +690,6 @@
         $('#' + $("#data-import-method").val()).show();
     };
 
-    /* Gets CSRF Token for AJAX Requests */
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {
@@ -414,7 +703,7 @@
             };
         };
         return cookieValue;
-    };
+    };*/
 
 
     /*****************************************************************************************
@@ -425,27 +714,36 @@
     $(document).ready(initApp);
 
     /* Listener for logging in to HydroShare */
-    $(document).on('click', '#login-link', hydroShareLogin);
+    //$(document).on('click', '#login-link', hydroShareLogin);
+
+    /* Listener for toggling a single row */
+    $(document).on('click', 'tr', toggleSelect);
 
     /* Listener for selecting all filtered data in table */
-    $(document).on('click', '#btn-select-all', tableSelectAll);
+    $(document).on('click', '#btn-select-all', selectAll);
 
     /* Listener for deselecting all filtered data in table */
-    $(document).on('click', '#btn-deselect-all', tableDeselectAll);
+    $(document).on('click', '#btn-deselect-all', deselectAll);
 
     /* Listener for removing all selected data in table */
-    $(document).on('click', '#btn-remove-selected', tableRemoveData);
+    $(document).on('click', '#btn-remove-selected', removeSelectedRows);
 
     /* Listener for updating default resource metadata */
-    $(document).on('click', '#create-resource-btn', updateDefaultResourceMetadata);
-
-    /* Listener for changing data import option */
-    $(document).on('change', '#data-import-method', changeDataImportOption);
+    $(document).on('click', '#btn-create-resource', updateResourceMetadata);
 
     /* Listener for creating a HydroShare resource */
     $(document).on('click', '#btn-create-timeseries-resource', createHydroShareResource);
 
     /* Listener for updating default resource metadata */
-    $(document).on('click', '#create-resource-btn', updateDefaultResourceMetadata);
+    //$(document).on('click', '#create-resource-btn', updateDefaultResourceMetadata);
+
+    /* Listener for changing data import option */
+    //$(document).on('change', '#data-import-method', changeDataImportOption);
+
+    /* Listener for creating a HydroShare resource */
+    //$(document).on('click', '#btn-create-timeseries-resource', createHydroShareResource);
+
+    /* Listener for updating default resource metadata */
+    //$(document).on('click', '#create-resource-btn', updateDefaultResourceMetadata);
 
 }());

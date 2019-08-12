@@ -31,31 +31,67 @@ class HydroshareTimeseriesManager(TethysAppBase):
                 controller='hydroshare_timeseries_manager.controllers.home'
             ),
             UrlMap(
-                name='ajax_login_test',
-                url='hydroshare-timeseries-manager/ajax/login-test',
-                controller='hydroshare_timeseries_manager.ajax_controllers.login_test'
+                name='ajax_update_table',
+                url='hydroshare-timeseries-manager/ajax/update-table',
+                controller='hydroshare_timeseries_manager.ajax_controllers.update_table'
             ),
             UrlMap(
-                name='ajax_load_session_data',
-                url='hydroshare-timeseries-manager/ajax/load-session-data',
-                controller='hydroshare_timeseries_manager.ajax_controllers.load_session_data'
+                name='ajax_update_selections',
+                url='hydroshare-timeseries-manager/ajax/update-selections',
+                controller='hydroshare_timeseries_manager.ajax_controllers.update_selections'
             ),
             UrlMap(
-                name='ajax_prepare_timeseries_data',
-                url='hydroshare-timeseries-manager/ajax/prepare-timeseries-data',
-                controller='hydroshare_timeseries_manager.ajax_controllers.prepare_timeseries_data'
+                name='ajax_remove_timeseries',
+                url='hydroshare-timeseries-manager/ajax/remove-timeseries',
+                controller='hydroshare_timeseries_manager.ajax_controllers.remove_timeseries'
             ),
             UrlMap(
-                name='ajax_check_timeseries_status',
-                url='hydroshare-timeseries-manager/ajax/ajax-check-timeseries-status',
-                controller='hydroshare_timeseries_manager.ajax_controllers.ajax_check_timeseries_status'
+                name='ajax_add_session_data',
+                url='hydroshare-timeseries-manager/ajax/add-session-data',
+                controller='hydroshare_timeseries_manager.ajax_controllers.add_session_data'
             ),
             UrlMap(
-                name='ajax_create_hydroshare_resource',
-                url='hydroshare-timeseries-manager/ajax/ajax-create-hydroshare-resource',
-                controller='hydroshare_timeseries_manager.ajax_controllers.ajax_create_hydroshare_resource'
+                name='ajax_prepare_session_data',
+                url='hydroshare-timeseries-manager/ajax/prepare-session-data',
+                controller='hydroshare_timeseries_manager.ajax_controllers.prepare_session_data'
+            ),
+            UrlMap(
+                name='ajax_update_resource_metadata',
+                url='hydroshare-timeseries-manager/ajax/update-resource-metadata',
+                controller='hydroshare_timeseries_manager.ajax_controllers.update_resource_metadata'
+            ),
+            UrlMap(
+                name='ajax_create_resource',
+                url='hydroshare-timeseries-manager/ajax/create-resource',
+                controller='hydroshare_timeseries_manager.ajax_controllers.create_resource'
             ),
         )
+
+        '''UrlMap(
+            name='ajax_login_test',
+            url='hydroshare-timeseries-manager/ajax/login-test',
+            controller='hydroshare_timeseries_manager.ajax_controllers.login_test'
+        ),
+        UrlMap(
+            name='ajax_load_session_data',
+            url='hydroshare-timeseries-manager/ajax/load-session-data',
+            controller='hydroshare_timeseries_manager.ajax_controllers.load_session_data'
+        ),
+        UrlMap(
+            name='ajax_prepare_timeseries_data',
+            url='hydroshare-timeseries-manager/ajax/prepare-timeseries-data',
+            controller='hydroshare_timeseries_manager.ajax_controllers.prepare_timeseries_data'
+        ),
+        UrlMap(
+            name='ajax_check_timeseries_status',
+            url='hydroshare-timeseries-manager/ajax/ajax-check-timeseries-status',
+            controller='hydroshare_timeseries_manager.ajax_controllers.ajax_check_timeseries_status'
+        ),
+        UrlMap(
+            name='ajax_create_hydroshare_resource',
+            url='hydroshare-timeseries-manager/ajax/ajax-create-hydroshare-resource',
+            controller='hydroshare_timeseries_manager.ajax_controllers.ajax_create_hydroshare_resource'
+        ),'''
 
         return url_maps
 
@@ -66,6 +102,12 @@ class HydroshareTimeseriesManager(TethysAppBase):
                 name='hydroshare_url',
                 type=CustomSetting.TYPE_STRING,
                 description='HydroShare URL',
+                required=True
+            ),
+            CustomSetting(
+                name='hydroserver_url',
+                type=CustomSetting.TYPE_STRING,
+                description='HydroServer URL',
                 required=True
             ),
         )
